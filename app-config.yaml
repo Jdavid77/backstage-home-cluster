@@ -1,10 +1,10 @@
 app:
-  title: Scaffolded Backstage App
+  title: HomeLab Backstage App
   baseUrl: http://localhost:3000
 
 organization:
-  name: My Company
-
+  name: HomeLab
+    
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/auth/service-to-service-auth for
@@ -28,8 +28,12 @@ backend:
   # This is for local development only, it is not recommended to use this in production
   # The production database configuration is stored in app-config.production.yaml
   database:
-    client: better-sqlite3
-    connection: ':memory:'
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
@@ -117,15 +121,18 @@ s3:
   bucketLocatorMethods:
     - type: config
       platforms:
-        - endpoint: https://s3.test.com
+        - endpoint: ${S3_ENDPOINT}
           name: minio
           region: weur
-          accessKeyId: dhjoasdaosidoaisjdasd
-          secretAccessKey: dsaohdiasuhdoasjdoasid
+          accessKeyId: ${S3_KEY_ID}
+          secretAccessKey: ${S3_ACCESS_KEY}
   allowedBuckets:
     - platform: minio
-      buckets:
-        - test
+      buckets: 
+        - loki
+        - postgres
+        - longhorn
+        - velero
   bucketRefreshSchedule:
     frequency: { minutes: 30 }
     timeout: { minutes: 1 }
