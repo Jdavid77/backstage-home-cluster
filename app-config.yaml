@@ -111,3 +111,21 @@ kubernetes:
 permission:
   # setting this to `false` will disable permissions
   enabled: true
+
+
+s3:
+  bucketLocatorMethods:
+    - type: config
+      platforms:
+        - endpoint: https://s3.test.com
+          name: minio
+          region: weur
+          accessKeyId: dhjoasdaosidoaisjdasd
+          secretAccessKey: dsaohdiasuhdoasjdoasid
+  allowedBuckets:
+    - platform: minio
+      buckets:
+        - test
+  bucketRefreshSchedule:
+    frequency: { minutes: 30 }
+    timeout: { minutes: 1 }

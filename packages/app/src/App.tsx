@@ -36,6 +36,10 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { S3ViewerPage } from '@spreadshirt/backstage-plugin-s3-viewer';
+import { UnifiedThemeProvider } from '@backstage/theme';
+import LightIcon from '@material-ui/icons/WbSunny';
+import { customTheme } from './theme/customTheme';
 
 const app = createApp({
   apis,
@@ -59,6 +63,15 @@ const app = createApp({
   components: {
     SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
   },
+  themes: [{
+    id: 'my-theme',
+    title: 'My Custom Theme',
+    variant: 'light',
+    icon: <LightIcon />,
+    Provider: ({ children }) => (
+      <UnifiedThemeProvider theme={customTheme} children={children} />
+    ),
+  }]
 });
 
 const routes = (
@@ -95,6 +108,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/s3-viewer" element={<S3ViewerPage />} />
   </FlatRoutes>
 );
 

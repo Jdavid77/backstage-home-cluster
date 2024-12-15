@@ -51,4 +51,7 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
+// S3
+backend.add(import('@spreadshirt/backstage-plugin-s3-viewer-backend'));
+
 backend.start();
