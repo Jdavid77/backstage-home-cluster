@@ -28,6 +28,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { MyGroupsSidebarItem } from '@backstage/plugin-org';
 import GroupIcon from '@material-ui/icons/People';
 import { SiAmazons3 } from 'react-icons/si';
+import BuildIcon from '@material-ui/icons/Build';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -76,6 +77,9 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
+        <SidebarItem icon={BuildIcon} to="devtools" text="DevTools" />
+        <SidebarItem icon={SiAmazons3} to="s3-viewer" text="S3 Viewer" />   
+
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>
@@ -91,7 +95,6 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
       >
         <SidebarSettings />
       </SidebarGroup>
-      <SidebarItem icon={SiAmazons3} to="s3-viewer" text="S3 Viewer" />   
     </Sidebar>
     {children}
   </SidebarPage>

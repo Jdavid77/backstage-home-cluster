@@ -145,3 +145,14 @@ s3:
   bucketRefreshSchedule:
     frequency: { minutes: 30 }
     timeout: { minutes: 1 }
+
+devTools:
+  externalDependencies:
+    endpoints:
+      - name: 'DNS Server'
+        type: 'ping'
+        target: '${DNS_SERVER_IP}'
+      - name: 'NAS'
+        type: 'ping'
+        target: '${NAS_IP}'
+

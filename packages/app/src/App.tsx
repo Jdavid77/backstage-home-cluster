@@ -40,6 +40,8 @@ import { S3ViewerPage } from '@spreadshirt/backstage-plugin-s3-viewer';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import LightIcon from '@material-ui/icons/WbSunny';
 import { customTheme } from './theme/customTheme';
+import { DevToolsPage } from '@backstage/plugin-devtools';
+import { customDevToolsPage } from './components/devtools/CustomDevToolsPage';
 
 const app = createApp({
   apis,
@@ -109,6 +111,9 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/s3-viewer" element={<S3ViewerPage />} />
+    <Route path="/devtools" element={<DevToolsPage />} >
+      {customDevToolsPage}
+    </Route>
   </FlatRoutes>
 );
 

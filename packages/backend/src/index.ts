@@ -54,4 +54,7 @@ backend.add(import('@backstage/plugin-kubernetes-backend'));
 // S3
 backend.add(import('@spreadshirt/backstage-plugin-s3-viewer-backend'));
 
+// DevTools
+backend.add(import('@backstage/plugin-devtools-backend'));
+
 backend.start();
