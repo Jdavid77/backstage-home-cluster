@@ -7,9 +7,45 @@
  */
 
 import { createBackend } from '@backstage/backend-defaults';
+import {
+  coreServices,
+  createBackendModule,
+} from '@backstage/backend-plugin-api';
+import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
+import { AuthentikUserProvider } from '../entityProviders/AuthentikUserProvider';
+
+export const catalogModuleAuthentikProvider = createBackendModule({
+  pluginId: 'catalog',
+  moduleId: 'authentik.entities',
+  register(env) {
+    env.registerInit({
+      deps: {
+        catalog: catalogProcessingExtensionPoint,
+        config: coreServices.rootConfig,
+        scheduler: coreServices.scheduler,
+      },
+      async init({ catalog, config, scheduler }) {
+        const authentikProvider = AuthentikUserProvider.fromConfig(config, {});
+
+        catalog.addEntityProvider(authentikProvider);
+
+        await scheduler.scheduleTask({
+          id: 'authentik_entities_refresh',
+          fn: async () => {
+            await authentikProvider.fetchAndEmitEntities();
+          },
+          frequency: { minutes: 30 },
+          timeout: { minutes: 2 },
+        });
+      },
+    });
+  },
+});
+
 
 const backend = createBackend();
 
+backend.add(catalogModuleAuthentikProvider);
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend'));
