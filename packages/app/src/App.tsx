@@ -21,7 +21,7 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis } from './apis';
+import { apis, authentikOIDCAuthApiRef } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
@@ -63,17 +63,33 @@ const app = createApp({
     });
   },
   components: {
-    SignInPage: props => <SignInPage {...props} auto providers={['guest']} />,
-  },
-  themes: [{
-    id: 'my-theme',
-    title: 'My Custom Theme',
-    variant: 'light',
-    icon: <LightIcon />,
-    Provider: ({ children }) => (
-      <UnifiedThemeProvider theme={customTheme} children={children} />
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        auto
+        providers={[
+          'guest',
+          {
+            id: 'authentik',
+            title: 'Authentik',
+            message: 'Sign in using Authentik',
+            apiRef: authentikOIDCAuthApiRef,
+          },
+        ]}
+      />
     ),
-  }]
+  },
+  themes: [
+    {
+      id: 'my-theme',
+      title: 'My Custom Theme',
+      variant: 'light',
+      icon: <LightIcon />,
+      Provider: ({ children }) => (
+        <UnifiedThemeProvider theme={customTheme} children={children} />
+      ),
+    },
+  ],
 });
 
 const routes = (
@@ -111,7 +127,7 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/s3-viewer" element={<S3ViewerPage />} />
-    <Route path="/devtools" element={<DevToolsPage />} >
+    <Route path="/devtools" element={<DevToolsPage />}>
       {customDevToolsPage}
     </Route>
   </FlatRoutes>

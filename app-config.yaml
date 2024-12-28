@@ -70,8 +70,11 @@ techdocs:
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
+
 auth:
   environment: development
+  session:
+    secret: '${SESSION_SECRET}'
   providers:
     github:
       development:
@@ -84,6 +87,17 @@ auth:
             # See https://backstage.io/docs/auth/github/provider#resolvers for more resolvers
             - resolver: usernameMatchingUserEntityName
     guest: {}
+    authentik:
+      development:
+        clientId: '${AUTHENTIK_CLIENT_ID}'
+        clientSecret: '${AUTHENTIK_CLIENT_SECRET}'
+        metadataUrl: '${AUTHENTIK_METADATA_URL}'
+        authorizationUrl: '${AUTHENTIK_AUTHORIZATION_URL}'
+        tokenUrl: '${AUTHENTIK_TOKEN_URL}'
+        prompt: auto
+        tokenSignedResponseAlg: 'RS256'
+        # https://github.com/goauthentik/authentik/issues/4824
+
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options

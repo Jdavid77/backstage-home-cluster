@@ -13,6 +13,39 @@ import {
 } from '@backstage/backend-plugin-api';
 import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
 import { AuthentikUserProvider } from '../entityProviders/AuthentikUserProvider';
+import { authProvidersExtensionPoint, createOAuthProviderFactory } from '@backstage/plugin-auth-node';
+import { oidcAuthenticator } from '@backstage/plugin-auth-backend-module-oidc-provider';
+
+export const authentikAuthProvider = createBackendModule({
+  pluginId: 'auth',
+  moduleId: 'authentik.auth',
+  register(reg) {
+    reg.registerInit({
+      deps: { providers: authProvidersExtensionPoint },
+      async init({ providers }) {
+        providers.registerProvider({
+          providerId: 'authentik',
+          factory: createOAuthProviderFactory({
+            authenticator: oidcAuthenticator,
+            async signInResolver(info, ctx) {
+
+              const {
+                result: {
+                  fullProfile: { userinfo },
+                },
+              } = info;
+
+              return ctx.signInWithCatalogUser({
+                entityRef: { name: String(userinfo.nickname) },
+              });
+            },
+          }),
+        });
+      },
+    });
+  },
+});
+
 
 export const catalogModuleAuthentikProvider = createBackendModule({
   pluginId: 'catalog',
@@ -45,7 +78,7 @@ export const catalogModuleAuthentikProvider = createBackendModule({
 
 const backend = createBackend();
 
-backend.add(catalogModuleAuthentikProvider);
+
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
 backend.add(import('@backstage/plugin-scaffolder-backend'));
@@ -92,5 +125,9 @@ backend.add(import('@spreadshirt/backstage-plugin-s3-viewer-backend'));
 
 // DevTools
 backend.add(import('@backstage/plugin-devtools-backend'));
+
+// Auth
+backend.add(catalogModuleAuthentikProvider);
+backend.add(authentikAuthProvider);
 
 backend.start();
