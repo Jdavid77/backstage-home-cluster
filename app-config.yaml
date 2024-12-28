@@ -5,6 +5,13 @@ app:
 organization:
   name: HomeLab
 
+stackoverflow:
+  baseUrl: https://api.stackexchange.com/2.2
+  requestParams:
+    tagged: [ 'backstage' ]                                   
+    site: 'stackoverflow'
+    pagesize: 100
+
 authentik:
   url: ${AUTHENTIK_URL}/api/v3/core
   token: ${AUTHENTIK_TOKEN}

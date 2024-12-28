@@ -214,20 +214,13 @@ export class AuthentikUserProvider implements EntityProvider {
       )
       .map(group => `group:default/${kebabCase(group.name)}`);
 
-    let name: string;
-    if (user.username.includes('@')) {
-      [name] = user.username.split('@');
-    } else {
-      name = user.username;
-    }
-
     // we can add any links here in this case it would be adding a slack link to the users so you can directly slack them.
     return {
       kind: 'User',
       apiVersion: 'backstage.io/v1alpha1',
       metadata: {
         // name of the entity
-        name: name,
+        name: user.username,
         // name for display purposes could be anything including email
         title: user.name,
         links,

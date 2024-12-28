@@ -33,7 +33,9 @@ export const authentikAuthProvider = createBackendModule({
                 result: {
                   fullProfile: { userinfo },
                 },
-              } = info;
+              } = info; 
+
+              console.log(userinfo);
 
               return ctx.signInWithCatalogUser({
                 entityRef: { name: String(userinfo.nickname) },
@@ -129,5 +131,10 @@ backend.add(import('@backstage/plugin-devtools-backend'));
 // Auth
 backend.add(catalogModuleAuthentikProvider);
 backend.add(authentikAuthProvider);
+
+// StackOverflow
+backend.add(
+    import('@backstage/plugin-search-backend-module-stack-overflow-collator'),
+);
 
 backend.start();
